@@ -1,0 +1,9 @@
+﻿id,text,example_type,prediction,model_score,score_positive,score_neutral,score_negative,status,error
+DEMO-01,The company reported higher quarterly profit and raised its full-year revenue outlook after strong demand for its products.,self-authored illustration,positive,0.9576684832572937,0.9576684832572937,0.022547274827957153,0.019784187898039818,ok,
+DEMO-02,The company will publish its quarterly financial report on Thursday before the market opens.,self-authored illustration,neutral,0.9290755391120911,0.017209917306900024,0.9290755391120911,0.05371459200978279,ok,
+DEMO-03,The manufacturer reported a decline in operating profit as weaker demand and rising costs reduced its margins.,self-authored illustration,negative,0.9756209254264832,0.008900962769985199,0.015478238463401794,0.9756209254264832,ok,
+DEMO-04,"Revenue increased compared with last year, but operating profit fell as higher production costs offset the sales growth.",self-authored illustration,negative,0.9736213088035583,0.011165880598127842,0.015212804079055786,0.9736213088035583,ok,
+DEMO-05,The bank announced that its annual general meeting will take place in May.,self-authored illustration,neutral,0.9425562024116516,0.025375304743647575,0.9425562024116516,0.03206850588321686,ok,
+DEMO-06,The retailer lowered its earnings forecast after recording a loss for the quarter.,self-authored illustration,negative,0.9715254306793213,0.007533314637839794,0.02094125561416149,0.9715254306793213,ok,
+DEMO-07,The supplier secured a new multi-year contract expected to increase annual sales.,self-authored illustration,positive,0.9553821682929993,0.9553821682929993,0.027058130130171776,0.017559751868247986,ok,
+DEMO-08,,intentionally blank validation example,,,,,,invalid,Text must be a non-empty string.

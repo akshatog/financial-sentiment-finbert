@@ -1,0 +1,7 @@
+{
+  "model_id": "ProsusAI/finbert",
+  "revision": "0bc2ac10dda6929bcb1f77ccc43c7ec5c424f031",
+  "format": "safetensors",
+  "source": "https://huggingface.co/ProsusAI/finbert",
+  "training_overlap": "Checkpoint fine-tuned on Financial PhraseBank."
+}

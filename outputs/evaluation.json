@@ -1,0 +1,288 @@
+{
+  "schema_version": 1,
+  "evaluated_at_utc": "2026-10-28T21:12:45.181357+00:00",
+  "baseline_evaluation_runs": 1,
+  "explicit_repeat_requested": false,
+  "dataset": "Financial PhraseBank v1.0, cleaned 50Agree, seeded stratified split",
+  "test_fingerprint": "ac70fa2c2fe8c1ac658b4b34daae54e4fdd3d2472e173af645033ebca9b3025d",
+  "test_rows": 726,
+  "baseline_model_sha256": "76daa6e13df1282aec6b1a86c8f1b9579a72ec6b058b8b8af58ca7a95de0c67f",
+  "baseline": {
+    "n_examples": 726,
+    "accuracy": 0.7575757575757576,
+    "macro_f1": 0.7194077658852299,
+    "weighted_f1": 0.7566645358097517,
+    "classification_report": {
+      "negative": {
+        "precision": 0.7045454545454546,
+        "recall": 0.6813186813186813,
+        "f1-score": 0.6927374301675978,
+        "support": 91
+      },
+      "neutral": {
+        "precision": 0.8177676537585421,
+        "recall": 0.8329466357308585,
+        "f1-score": 0.825287356321839,
+        "support": 431
+      },
+      "positive": {
+        "precision": 0.6482412060301508,
+        "recall": 0.6323529411764706,
+        "f1-score": 0.6401985111662531,
+        "support": 204
+      },
+      "accuracy": 0.7575757575757576,
+      "macro avg": {
+        "precision": 0.7235181047780491,
+        "recall": 0.7155394194086702,
+        "f1-score": 0.7194077658852299,
+        "support": 726
+      },
+      "weighted avg": {
+        "precision": 0.7559403597296401,
+        "recall": 0.7575757575757576,
+        "f1-score": 0.7566645358097517,
+        "support": 726
+      }
+    },
+    "per_class": {
+      "negative": {
+        "precision": 0.7045454545454546,
+        "recall": 0.6813186813186813,
+        "f1-score": 0.6927374301675978,
+        "support": 91
+      },
+      "neutral": {
+        "precision": 0.8177676537585421,
+        "recall": 0.8329466357308585,
+        "f1-score": 0.825287356321839,
+        "support": 431
+      },
+      "positive": {
+        "precision": 0.6482412060301508,
+        "recall": 0.6323529411764706,
+        "f1-score": 0.6401985111662531,
+        "support": 204
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "negative",
+        "neutral",
+        "positive"
+      ],
+      "rows": "true",
+      "columns": "predicted",
+      "counts": [
+        [
+          62,
+          17,
+          12
+        ],
+        [
+          14,
+          359,
+          58
+        ],
+        [
+          12,
+          63,
+          129
+        ]
+      ]
+    },
+    "provenance": {
+      "interpretation": "Held-out test evaluation of our independently trained conventional baseline",
+      "training_data": "Financial PhraseBank 50Agree, saved training partition only",
+      "selection_data": "Saved validation partition only; C selected by macro F1",
+      "test_data": "Saved test partition, excluded from TF-IDF fitting, model fitting and selection",
+      "named_labels": true,
+      "normalized_sentence_overlap_with_train_or_validation": 0,
+      "test_used_for_training_or_selection": false
+    }
+  },
+  "majority_baseline": {
+    "n_examples": 726,
+    "accuracy": 0.59366391184573,
+    "macro_f1": 0.24834341688274272,
+    "weighted_f1": 0.4422975730432318,
+    "classification_report": {
+      "negative": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 91
+      },
+      "neutral": {
+        "precision": 0.59366391184573,
+        "recall": 1.0,
+        "f1-score": 0.7450302506482281,
+        "support": 431
+      },
+      "positive": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 204
+      },
+      "accuracy": 0.59366391184573,
+      "macro avg": {
+        "precision": 0.19788797061524332,
+        "recall": 0.3333333333333333,
+        "f1-score": 0.24834341688274272,
+        "support": 726
+      },
+      "weighted avg": {
+        "precision": 0.35243684022797467,
+        "recall": 0.59366391184573,
+        "f1-score": 0.4422975730432318,
+        "support": 726
+      }
+    },
+    "per_class": {
+      "negative": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 91
+      },
+      "neutral": {
+        "precision": 0.59366391184573,
+        "recall": 1.0,
+        "f1-score": 0.7450302506482281,
+        "support": 431
+      },
+      "positive": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 204
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "negative",
+        "neutral",
+        "positive"
+      ],
+      "rows": "true",
+      "columns": "predicted",
+      "counts": [
+        [
+          0,
+          91,
+          0
+        ],
+        [
+          0,
+          431,
+          0
+        ],
+        [
+          0,
+          204,
+          0
+        ]
+      ]
+    },
+    "label": "neutral",
+    "provenance": {
+      "interpretation": "Majority class selected from training labels only",
+      "test_used_for_class_selection": false
+    }
+  },
+  "finbert": {
+    "n_examples": 726,
+    "accuracy": 0.8815426997245179,
+    "macro_f1": 0.8751310990595589,
+    "weighted_f1": 0.8827566716426006,
+    "classification_report": {
+      "negative": {
+        "precision": 0.8130841121495327,
+        "recall": 0.9560439560439561,
+        "f1-score": 0.8787878787878788,
+        "support": 91
+      },
+      "neutral": {
+        "precision": 0.9487179487179487,
+        "recall": 0.8584686774941995,
+        "f1-score": 0.9013398294762485,
+        "support": 431
+      },
+      "positive": {
+        "precision": 0.7991266375545851,
+        "recall": 0.8970588235294118,
+        "f1-score": 0.8452655889145496,
+        "support": 204
+      },
+      "accuracy": 0.8815426997245179,
+      "macro avg": {
+        "precision": 0.8536428994740222,
+        "recall": 0.9038571523558558,
+        "f1-score": 0.8751310990595589,
+        "support": 726
+      },
+      "weighted avg": {
+        "precision": 0.8896830911352324,
+        "recall": 0.8815426997245179,
+        "f1-score": 0.8827566716426006,
+        "support": 726
+      }
+    },
+    "per_class": {
+      "negative": {
+        "precision": 0.8130841121495327,
+        "recall": 0.9560439560439561,
+        "f1-score": 0.8787878787878788,
+        "support": 91
+      },
+      "neutral": {
+        "precision": 0.9487179487179487,
+        "recall": 0.8584686774941995,
+        "f1-score": 0.9013398294762485,
+        "support": 431
+      },
+      "positive": {
+        "precision": 0.7991266375545851,
+        "recall": 0.8970588235294118,
+        "f1-score": 0.8452655889145496,
+        "support": 204
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "negative",
+        "neutral",
+        "positive"
+      ],
+      "rows": "true",
+      "columns": "predicted",
+      "counts": [
+        [
+          87,
+          2,
+          2
+        ],
+        [
+          17,
+          370,
+          44
+        ],
+        [
+          3,
+          18,
+          183
+        ]
+      ]
+    },
+    "status": "evaluated",
+    "checkpoint": "ProsusAI/finbert",
+    "provenance": {
+      "interpretation": "Overlapping-data diagnostic; checkpoint was fine-tuned on Financial PhraseBank",
+      "independent_test_claim": false,
+      "fair_unseen_comparison_to_baseline": false,
+      "checkpoint_training_overlap": "Known dataset-level overlap; exact original checkpoint row membership is not established",
+      "checkpoint_revision": "0bc2ac10dda6929bcb1f77ccc43c7ec5c424f031"
+    }
+  }
+}

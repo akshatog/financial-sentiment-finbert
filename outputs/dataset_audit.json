@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "prepared_at_utc": "2026-10-28T21:11:49.433225+00:00",
+  "source": {
+    "name": "Financial PhraseBank v1.0",
+    "main_subset": "50Agree",
+    "url": "https://huggingface.co/datasets/takala/financial_phrasebank/resolve/main/data/FinancialPhraseBank-v1.0.zip",
+    "sha256": "0e1a06c4900fdae46091d031068601e3773ba067c7cecb5b0da1dcba5ce989a6",
+    "archive": "data\\raw\\FinancialPhraseBank-v1.0.zip",
+    "encoding": "ISO-8859-1 / latin-1",
+    "parser": "Split each source line at its final @",
+    "license_note": "Dataset terms are separate from code terms; consult the source/archive README. Full dataset sentences and private error examples are not published."
+  },
+  "versions": {
+    "50Agree": {
+      "rows": 4846,
+      "class_counts": {
+        "negative": 604,
+        "neutral": 2879,
+        "positive": 1363
+      },
+      "blank_sentences": 0,
+      "exact_duplicate_occurrences": 8,
+      "normalized_duplicate_occurrences": 8,
+      "normalized_conflicting_groups": 2,
+      "normalized_conflicting_rows": 4,
+      "sentence_characters": {
+        "min": 9,
+        "median": 119.0,
+        "max": 315
+      },
+      "sentence_words": {
+        "min": 2,
+        "median": 21.0,
+        "max": 81
+      }
+    },
+    "66Agree": {
+      "rows": 4217,
+      "class_counts": {
+        "negative": 514,
+        "neutral": 2535,
+        "positive": 1168
+      },
+      "blank_sentences": 0,
+      "exact_duplicate_occurrences": 6,
+      "normalized_duplicate_occurrences": 6,
+      "normalized_conflicting_groups": 0,
+      "normalized_conflicting_rows": 0,
+      "sentence_characters": {
+        "min": 9,
+        "median": 119.0,
+        "max": 315
+      },
+      "sentence_words": {
+        "min": 2,
+        "median": 21.0,
+        "max": 81
+      }
+    },
+    "75Agree": {
+      "rows": 3453,
+      "class_counts": {
+        "negative": 420,
+        "neutral": 2146,
+        "positive": 887
+      },
+      "blank_sentences": 0,
+      "exact_duplicate_occurrences": 5,
+      "normalized_duplicate_occurrences": 5,
+      "normalized_conflicting_groups": 0,
+      "normalized_conflicting_rows": 0,
+      "sentence_characters": {
+        "min": 9,
+        "median": 116.0,
+        "max": 315
+      },
+      "sentence_words": {
+        "min": 2,
+        "median": 21.0,
+        "max": 81
+      }
+    },
+    "AllAgree": {
+      "rows": 2264,
+      "class_counts": {
+        "negative": 303,
+        "neutral": 1391,
+        "positive": 570
+      },
+      "blank_sentences": 0,
+      "exact_duplicate_occurrences": 5,
+      "normalized_duplicate_occurrences": 5,
+      "normalized_conflicting_groups": 0,
+      "normalized_conflicting_rows": 0,
+      "sentence_characters": {
+        "min": 9,
+        "median": 111.0,
+        "max": 315
+      },
+      "sentence_words": {
+        "min": 2,
+        "median": 21.0,
+        "max": 81
+      }
+    }
+  },
+  "version_policy": "Audit agreement subsets separately; never concatenate these overlapping versions",
+  "main_dataset": {
+    "rows": 4846,
+    "class_counts": {
+      "negative": 604,
+      "neutral": 2879,
+      "positive": 1363
+    },
+    "blank_sentences": 0,
+    "exact_duplicate_occurrences": 8,
+    "normalized_duplicate_occurrences": 8,
+    "normalized_conflicting_groups": 2,
+    "normalized_conflicting_rows": 4,
+    "sentence_characters": {
+      "min": 9,
+      "median": 119.0,
+      "max": 315
+    },
+    "sentence_words": {
+      "min": 2,
+      "median": 21.0,
+      "max": 81
+    },
+    "conflicting_rows_quarantined": 4,
+    "matching_duplicate_occurrences_removed": 6,
+    "clean_rows": 4836,
+    "clean_class_counts": {
+      "negative": 604,
+      "neutral": 2871,
+      "positive": 1361
+    },
+    "duplicate_policy": "NFKC Unicode normalization, casefold, collapse whitespace; quarantine every conflicting group; retain first matching sentence",
+    "quarantined_group_ids": [
+      "fpb_7bb77de286675610bdf2",
+      "fpb_f5ae994bba47400b29d4"
+    ],
+    "raw_rows": 4846
+  },
+  "splits": {
+    "seed": 42,
+    "method": "Two stratified random splits after canonical duplicate removal; integer rounding may shift proportions slightly",
+    "target_proportions": {
+      "train": 0.7,
+      "validation": 0.15,
+      "test": 0.15
+    },
+    "partitions": {
+      "train": {
+        "rows": 3385,
+        "class_counts": {
+          "negative": 423,
+          "neutral": 2009,
+          "positive": 953
+        },
+        "fingerprint": "b5a6d3ca85e7fc279bc8a8e59d52f7ac398e61617a4e54a440ed6c335dde22ad"
+      },
+      "validation": {
+        "rows": 725,
+        "class_counts": {
+          "negative": 90,
+          "neutral": 431,
+          "positive": 204
+        },
+        "fingerprint": "ecbb7930dd2029fd2ebd0f39d89a85e512da51f8ec748fb6a8f9736428c0e2bc"
+      },
+      "test": {
+        "rows": 726,
+        "class_counts": {
+          "negative": 91,
+          "neutral": 431,
+          "positive": 204
+        },
+        "fingerprint": "ac70fa2c2fe8c1ac658b4b34daae54e4fdd3d2472e173af645033ebca9b3025d"
+      }
+    },
+    "normalized_sentence_overlap": 0,
+    "id_overlap": 0
+  }
+}

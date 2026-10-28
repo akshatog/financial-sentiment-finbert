@@ -1,0 +1,7 @@
+These 30 sentences paraphrase facts from the linked 2026 company releases and filing. They are a small curated behavior check across four sources, with correlated examples and an intentionally narrow domain. They are not a random sample of financial news or an established benchmark.
+
+Before running model predictions, a human reviewer should fill `human_label` with `positive`, `neutral`, `negative`, or `exclude`. Judge only the financial meaning supplied in each sentence, from the viewpoint of the company/investor described. A factual date or scheduled event can be neutral. Changes in profit, costs, or losses require attention to the direction and comparison period. Record ambiguous or insufficient-context decisions in `review_notes`; `exclude` requires a reason.
+
+Do not use the model to generate these labels. Do not change the labels after inspecting predictions to improve accuracy. The evaluation script refuses incomplete review files and saves a fingerprint of the reviewed set. Suggested labels and model outputs are deliberately absent from this file.
+
+After review, run `python -m scripts.evaluate_review`. This records a small student-reviewed check and its limitations. The existing PhraseBank results remain clearly distinguished from this check. Paraphrasing and source dates do not alone prove independence from all possible model training; the known PhraseBank corpus is checked explicitly.

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "model_type": "TF-IDF (word unigrams/bigrams) + class-balanced logistic regression",
+  "labels": [
+    "negative",
+    "neutral",
+    "positive"
+  ],
+  "seed": 42,
+  "training_rows": 3385,
+  "validation_rows": 725,
+  "training_class_counts": {
+    "negative": 423,
+    "neutral": 2009,
+    "positive": 953
+  },
+  "majority_label": "neutral",
+  "train_fingerprint": "b5a6d3ca85e7fc279bc8a8e59d52f7ac398e61617a4e54a440ed6c335dde22ad",
+  "validation_fingerprint": "ecbb7930dd2029fd2ebd0f39d89a85e512da51f8ec748fb6a8f9736428c0e2bc",
+  "selection_metric": "validation macro F1; smaller C wins exact ties",
+  "selected_C": 2.0,
+  "validation_macro_f1": 0.7161292680252883,
+  "candidates": [
+    {
+      "C": 0.5,
+      "validation_macro_f1": 0.6862440191387561,
+      "validation_accuracy": 0.7379310344827587
+    },
+    {
+      "C": 1.0,
+      "validation_macro_f1": 0.6988977411621375,
+      "validation_accuracy": 0.7462068965517241
+    },
+    {
+      "C": 2.0,
+      "validation_macro_f1": 0.7161292680252883,
+      "validation_accuracy": 0.7572413793103449
+    },
+    {
+      "C": 4.0,
+      "validation_macro_f1": 0.7099904420409658,
+      "validation_accuracy": 0.7517241379310344
+    }
+  ],
+  "fit_data": "Training partition only, including TF-IDF vocabulary and IDF weights; no refit on validation or test",
+  "test_used_for_training_or_selection": false,
+  "feature_count": 11138,
+  "parameters": {
+    "ngram_range": [
+      1,
+      2
+    ],
+    "min_df": 2,
+    "max_df": 0.98,
+    "sublinear_tf": true,
+    "class_weight": "balanced",
+    "max_iter": 2000
+  },
+  "trained_at_utc": "2026-10-28T21:12:39.051065+00:00",
+  "elapsed_seconds": 1.507,
+  "model_file": "tfidf_logreg.joblib",
+  "model_sha256": "76daa6e13df1282aec6b1a86c8f1b9579a72ec6b058b8b8af58ca7a95de0c67f",
+  "dataset": "Financial PhraseBank v1.0, 50Agree; cleaned canonical split",
+  "versions": {
+    "scikit-learn": "1.9.1",
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "joblib": "1.6.0"
+  }
+}

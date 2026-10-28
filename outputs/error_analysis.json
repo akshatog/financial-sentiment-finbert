@@ -1,0 +1,58 @@
+{
+  "model": "baseline",
+  "total_errors": 176,
+  "correct_predictions": 550,
+  "error_pairs": [
+    {
+      "true": "negative",
+      "predicted": "neutral",
+      "count": 17
+    },
+    {
+      "true": "negative",
+      "predicted": "positive",
+      "count": 12
+    },
+    {
+      "true": "neutral",
+      "predicted": "negative",
+      "count": 14
+    },
+    {
+      "true": "neutral",
+      "predicted": "positive",
+      "count": 58
+    },
+    {
+      "true": "positive",
+      "predicted": "negative",
+      "count": 12
+    },
+    {
+      "true": "positive",
+      "predicted": "neutral",
+      "count": 63
+    }
+  ],
+  "high_confidence_error_ids": [
+    "fpb_df9f796cc8e87ca93abd",
+    "fpb_5ced34c9833a6b7e59be",
+    "fpb_66d0bf2576dbc7945284",
+    "fpb_2dc00d80e88aee649115",
+    "fpb_74e3a571e0125c444a6c",
+    "fpb_fbf7fea07f2c49f19f37",
+    "fpb_801afde35ae0137fe3e4",
+    "fpb_5938e2611d164b6125ec",
+    "fpb_9ae94af72d42026e7c5c",
+    "fpb_d4cd64f468643066aea7",
+    "fpb_969f6ab94b202612e687",
+    "fpb_9cac1cfda4536576c2a0"
+  ],
+  "private_error_file": "outputs/predictions/baseline_errors.csv",
+  "publication_policy": "Public report includes aggregate counts and record IDs only. Full licensed dataset sentences remain in ignored private local files.",
+  "review_prompts": [
+    "Inspect errors involving negation and changes over time",
+    "Inspect mixed information and missing financial context",
+    "Review neutral versus weak positive/negative confusion without claiming an automatic cause"
+  ]
+}
