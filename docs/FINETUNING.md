@@ -91,6 +91,12 @@ the sentiment classifier. A traceback or failed cell should be checked before
 continuing. Actual CUDA execution is verified by the notebook's smoke test;
 the local tiny CPU test verifies workflow code, not large-model GPU fit or speed.
 
+The current notebook streams the child process's standard output and errors into
+each cell. Older saved copies used inherited subprocess output, which may appear
+silent in some notebook environments. A running cell without visible progress
+does not establish success or failure. Preserve its session and files; inspect
+the final result or saved training manifest before deciding whether to retry.
+
 ## Local alternative and interruptions
 
 The current app environment has CPU-only PyTorch and must remain separate from

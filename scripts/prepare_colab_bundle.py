@@ -94,10 +94,39 @@ del payload, uploaded
 os.chdir(ROOT)
 print("Verified input bundle. Exact saved splits: train 3385 / validation 725 / test 726.")
 '''),
+        _cell("code", '''
+def run_visible(command):
+    """Forward child-process output into the notebook as it arrives."""
+    environment = dict(os.environ, PYTHONUNBUFFERED="1")
+    process = subprocess.Popen(
+        command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        text=True, bufsize=1, env=environment,
+    )
+    try:
+        for line in process.stdout:
+            print(line, end="", flush=True)
+        returncode = process.wait()
+    except BaseException:
+        if process.poll() is None:
+            process.terminate()
+            try:
+                process.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                process.wait()
+        raise
+    finally:
+        process.stdout.close()
+    if returncode:
+        raise RuntimeError(
+            f"Command exited with code {returncode}. Read the script's error above; "
+            "preserve existing files before retrying."
+        )
+'''),
         _cell("markdown", "## 2. Install training libraries and verify GPU"),
         _cell("code", '''
-subprocess.run([sys.executable, "-m", "pip", "install", "--quiet", "-r", "requirements-training.txt"], check=True)
-subprocess.run([sys.executable, "-c", "import torch; assert torch.cuda.is_available(), 'No CUDA GPU: change runtime type to GPU, then rerun'; print('GPU:', torch.cuda.get_device_name(0)); print('PyTorch:', torch.__version__); print('GPU memory GiB:', round(torch.cuda.get_device_properties(0).total_memory / 1024**3, 2))"], check=True)
+run_visible([sys.executable, "-m", "pip", "install", "--quiet", "-r", "requirements-training.txt"])
+run_visible([sys.executable, "-c", "import torch; assert torch.cuda.is_available(), 'No CUDA GPU: change runtime type to GPU, then rerun'; print('GPU:', torch.cuda.get_device_name(0)); print('PyTorch:', torch.__version__); print('GPU memory GiB:', round(torch.cuda.get_device_properties(0).total_memory / 1024**3, 2))"])
 '''),
         _cell("markdown", """
 ## 3. Check real training, validation, and checkpoint saving
@@ -108,7 +137,7 @@ Warnings about newly initialized classifier/pooler weights and unused pretrainin
 head weights are expected. A traceback or failed cell needs attention.
 """),
         _cell("code", '''
-subprocess.run([sys.executable, "scripts/train_finbert.py", "--smoke-test"], check=True)
+run_visible([sys.executable, "scripts/train_finbert.py", "--smoke-test"])
 '''),
         _cell("markdown", """
 ## 4. Fine-tune on all training rows
@@ -124,7 +153,7 @@ and ask for help resuming rather than repeating the test.
 """),
         _cell("code", '''
 MODEL_DIR = "models/finbert_finetuned"
-subprocess.run([sys.executable, "scripts/train_finbert.py", "--output-dir", MODEL_DIR], check=True)
+run_visible([sys.executable, "scripts/train_finbert.py", "--output-dir", MODEL_DIR])
 '''),
         _cell("markdown", """
 ## 5. Evaluate the selected frozen checkpoint
@@ -137,13 +166,13 @@ fine-tuned on Financial PhraseBank. This experiment does not prove that every
 test sentence was absent from HKUST's large pretraining corpus.
 """),
         _cell("code", '''
-subprocess.run([sys.executable, "scripts/evaluate_finetuned.py", "--model-dir", MODEL_DIR, "--output-dir", "outputs/finetuning"], check=True)
+run_visible([sys.executable, "scripts/evaluate_finetuned.py", "--model-dir", MODEL_DIR, "--output-dir", "outputs/finetuning"])
 '''),
         _cell("markdown", "## 6. Export and download the result bundle"),
         _cell("code", '''
 RESULT_ZIP = ROOT / "finbert_finetuned_results.zip"
 if not RESULT_ZIP.exists():
-    subprocess.run([sys.executable, "scripts/export_finetuned.py", "--model-dir", MODEL_DIR, "--evaluation-dir", "outputs/finetuning", "--destination", str(RESULT_ZIP)], check=True)
+    run_visible([sys.executable, "scripts/export_finetuned.py", "--model-dir", MODEL_DIR, "--evaluation-dir", "outputs/finetuning", "--destination", str(RESULT_ZIP)])
 with zipfile.ZipFile(RESULT_ZIP) as archive:
     if archive.testzip() is not None:
         raise ValueError("The export ZIP is damaged; preserve the model and ask for help exporting again.")
