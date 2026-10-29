@@ -1,0 +1,33 @@
+{
+  "status": "verified",
+  "archive": "finbert_finetuned_results.zip",
+  "archive_sha256": "155ca67e272fbaef5413b4cad7f44237a52a006b9ffee623ddd5013e5a862592",
+  "archive_member_checksums_verified": 10,
+  "inference_file_sha256": {
+    "config.json": "1378309c875927253adffcbabbd791bba78eb098548770aabab3987bcdf330fd",
+    "model.safetensors": "39eb5674d0adaf82a9a69dcfdec6736a2698bd2a9c0c7e3e90cd41c2afbe68f3",
+    "special_tokens_map.json": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3",
+    "tokenizer.json": "ff9c125095ce0d30524ee1b8cc34397c89321199184b6d8f196170c39208eee5",
+    "tokenizer_config.json": "728f339446eb36034b456e80933b31713923bd4885a0d79893b699bd3ef48467",
+    "vocab.txt": "85f2481b4e3c25a7ece5e0e4930631a75c1a5fe2d31b0ecd9b5d51136ab98de8"
+  },
+  "split_fingerprints_match": true,
+  "evaluation_bound_to_model": true,
+  "metrics_recomputed_from_confusion_matrix": true,
+  "saved_encoder_tensor_matches_training_evidence": true,
+  "local_cpu_load_and_prediction_verified": true,
+  "smoke_examples": 3,
+  "smoke_predictions": [
+    "positive",
+    "negative",
+    "neutral"
+  ],
+  "smoke_is_an_accuracy_benchmark": false,
+  "test_inference_repeated": false,
+  "test_accuracy": 0.8512396694214877,
+  "test_macro_f1": 0.8446063720591761,
+  "test_correct": 618,
+  "test_rows": 726,
+  "selected_checkpoint": "models/finbert_finetuned/checkpoints/checkpoint-424",
+  "local_load_and_smoke_seconds": 4.877
+}

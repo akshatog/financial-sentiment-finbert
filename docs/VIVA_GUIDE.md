@@ -1,53 +1,58 @@
 # Viva guide
 
-**What problem does this project solve?**  
-It classifies the financial sentiment expressed by short English statements. It helps inspect a collection of financial text, but it does not predict stock returns.
+**What problem does this project solve?**
+It classifies short English financial statements into positive, negative and neutral sentiment. It does not predict stock prices or returns.
 
-**What did you train?**  
-The project trains TF-IDF + logistic regression on the saved training split. It uses the pretrained ProsusAI FinBERT checkpoint for transformer inference without further fine-tuning.
+**What did you train yourself?**
+We fine-tuned all 109,754,115 parameters of `yiyanghkust/finbert-pretrain` with a new three-class sentiment head. We also trained TF-IDF + logistic regression. We did not pretrain BERT from scratch.
 
-**Why is this connected to deep learning?**  
-FinBERT is a BERT transformer with a sequence classification head. The app applies its tokenizer, contextual encoder, and three-class output to financial language. The baseline gives an interpretable supervised reference.
+**How was FinBERT trained?**
+The fixed training split has 3,385 sentences, validation 725, and test 726. On a Tesla T4, training used 3 epochs, learning rate 2e-5, maximum length 128, microbatch 2, accumulation 8, FP16 and gradient checkpointing. The run completed 636 optimizer updates in about 7 minutes 50 seconds.
 
-**What is tokenization?**  
-The tokenizer converts text into model vocabulary IDs and special tokens. BERT may split an unfamiliar word into subword pieces. The tokenizer's length limit counts tokens, not characters or words.
+**Why is the chosen model from epoch 2 if you trained 3 epochs?**
+Validation macro-F1 selected checkpoint 424 from epoch 2 at 81.92%. Epoch 3 was slightly weaker and its validation loss increased. The training code reloaded the best validation checkpoint before export; the test did not choose the epoch.
 
-**Why use FinBERT instead of generic sentiment?**  
-Financial language uses specialized meanings. An increase in costs and an increase in revenue can imply different financial sentiment. FinBERT's financial adaptation aims to represent that domain language. We must measure performance rather than assume every example will work.
+**What results can you claim?**
+On the saved held-out PhraseBank test split, fine-tuned FinBERT achieved 85.12% accuracy and 84.46% macro-F1, correctly classifying 618/726 examples. The baseline achieved 75.76% and 71.94%, or 550/726. The gains are 9.37 and 12.52 percentage points on that split, not guarantees about future news.
 
-**What does attention do?**  
-Self-attention combines information across the tokens in a sequence to construct contextual representations. BERT uses multiple attention heads and encoder layers. The sentence-classification head maps its representation to class logits.
+**Is this the same FinBERT as the original app model?**
+No. The new experiment starts from HKUST's financial language-model checkpoint. The original `ProsusAI/finbert` is a separate release already sentiment-fine-tuned on Financial PhraseBank; it remains an optional pretrained reference.
 
-**What are the three displayed scores?**  
-FinBERT applies softmax to logits. The baseline uses its classifier's probability outputs. Their largest score selects a label, but these scores are not a measured guarantee of correctness. Calibration is outside the current experiment.
+**Why not call the Prosus 88.15% score better than our 85.12%?**
+Prosus already used PhraseBank for supervised sentiment training. A new local split cannot undo that prior exposure. Its 88.15% accuracy and 87.51% macro-F1 are a diagnostic, not a fair unseen-data ranking against our models. Unknown overlap with HKUST's language-model pretraining corpus also remains a limitation.
 
-**Why read the model label configuration?**  
-Numeric label IDs can use different orders in a model and a dataset. Matching names avoids silently scoring positive predictions as another class.
+**What proves actual encoder fine-tuning happened?**
+The manifest records all parameters trainable, optimizer steps and finite training/validation metrics. The saved encoder query tensor has a different before/after checksum and matches the returned weight file. Training history, selected checkpoint, model hashes and evaluation bindings were verified; the exported model loads locally.
 
-**Why a conventional baseline?**  
-It shows what a smaller model trained by this project can achieve. It also makes the training contribution and held-out evaluation explicit.
+**What is transfer learning?**
+We start from a model that has already learned language representations, then update its parameters on labelled financial sentiment examples. This is full fine-tuning with a new classifier, not training a large language model from scratch.
 
-**Why is macro F1 useful?**  
-Neutral is the largest class. Accuracy can hide poor performance on negative examples. Macro F1 weights each class equally rather than weighting by its size.
+**What does self-attention do?**
+It combines information across tokens to form contextual representations. BERT has multiple attention heads and encoder layers; the classification head maps the sentence representation to three logits.
 
-**How did you avoid leakage?**  
-We audit and handle duplicate groups before partitioning. Saved train, validation, and test membership has no normalized duplicate text across splits. TF-IDF fits only on training rows. Validation selects settings, and the final test supplies the held-out baseline result.
+**What is tokenization and why have a limit?**
+The matching tokenizer converts text into vocabulary IDs and special tokens, including subword pieces. The fine-tuned workflow used a 128-token limit. No training or test sentence was truncated; one validation sentence was. The app rejects inputs beyond the selected model's supported policy instead of silently cutting them.
 
-**Is FinBERT's test result independent?**  
-No. The published FinBERT checkpoint already uses Financial PhraseBank for fine-tuning. A new local partition cannot remove that earlier exposure. Its PhraseBank metric is an overlapping-data diagnostic, so it is not a fair unseen-data comparison with our baseline.
+**Why read label names from configuration?**
+Our IDs are negative=0, neutral=1, positive=2, while Prosus uses a different order. Explicit mappings prevent silently swapping class meanings.
 
-**Is the baseline test result fully independent of all financial news?**  
-It is held out from our baseline training process. It still comes from the same corpus and random sampling. Temporal shifts, repeated entities, and close paraphrases can limit generalization.
+**Why include a conventional baseline?**
+TF-IDF + logistic regression shows what a smaller model trained on the same split achieves. Its vocabulary fits on training rows only, and validation selects C=2. That gives the transformer result a meaningful comparison.
 
-**How would you improve the evidence?**  
-Collect a new source-linked set of financial sentences, obtain human labels before running the models, check overlap, freeze it, and evaluate once. A larger test over later dates and more markets would support stronger conclusions.
+**Why report macro-F1 as well as accuracy?**
+Neutral is the largest class. Accuracy counts all examples equally, while macro-F1 averages the three class F1 scores equally. This helps expose poor performance on smaller classes.
 
-**What are the main failure cases?**  
-Mixed statements, negation, missing entity context, nonfinancial language, sarcasm, and inputs beyond the supported token limit. Review a misclassified example and explain its ambiguity instead of assuming the model is always right.
+**How did you avoid data leakage?**
+We normalized and grouped duplicates before splitting, quarantined conflicting groups, and saved disjoint train/validation/test membership. Both student models train only on training rows and select settings on validation. Fingerprints bind the final test to the original split. This does not establish time or entity independence or exclude all paraphrases.
 
-**What would fine-tuning add?**  
-A separate experiment could start from a base language-model checkpoint and train a classifier on our saved training rows. Hyperparameters would use validation data. It needs additional compute and a clean distinction from the already fine-tuned FinBERT checkpoint.
+**What are the weakest results?**
+Positive sentiment has the lowest fine-tuned class F1 at 76.59%. Positive/neutral confusions account for 87 of 108 errors. Those counts identify an error pattern without proving its cause.
 
-**Can this be used commercially under the source code license?**  
-The original source uses MIT. That does not cover third-party weights or data. The FinBERT weights and PhraseBank dataset have their own noncommercial Creative Commons terms, recorded in the attribution document.
+**Are the displayed scores confidence guarantees?**
+No. They are softmax or classifier scores. We have not calibrated them against independent data.
 
+**What would strengthen the evidence?**
+Freeze human labels for new source-linked financial text before revealing model predictions, check overlap, and evaluate once. The provided 30-example review sheet is still unlabelled and is not a completed independent benchmark.
+
+**Can this be used commercially under MIT?**
+MIT covers our source code, not third-party data or model weights. Prosus, HKUST and PhraseBank are separate assets with separate terms. Consult the attribution document rather than assuming one license covers everything.

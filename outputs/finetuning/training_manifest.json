@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "run_id": "20261029T083534Z-3ea89e75",
+  "status": "completed",
+  "smoke_test": false,
+  "method": "full_fine_tuning",
+  "base_model": "yiyanghkust/finbert-pretrain",
+  "base_revision": "88ab954a39ea6d3ce2b62cff086dd5ad1172c664",
+  "started_at_utc": "2026-10-29T08:35:34.131990+00:00",
+  "hardware": {
+    "device": "cuda",
+    "gpu_name": "Tesla T4",
+    "gpu_total_bytes": 15637086208
+  },
+  "label2id": {
+    "negative": 0,
+    "neutral": 1,
+    "positive": 2
+  },
+  "id2label": {
+    "0": "negative",
+    "1": "neutral",
+    "2": "positive"
+  },
+  "test_used_for_training_or_selection": false,
+  "source_split_rows": {
+    "train": 3385,
+    "validation": 725
+  },
+  "split_fingerprints": {
+    "train": "b5a6d3ca85e7fc279bc8a8e59d52f7ac398e61617a4e54a440ed6c335dde22ad",
+    "validation": "ecbb7930dd2029fd2ebd0f39d89a85e512da51f8ec748fb6a8f9736428c0e2bc"
+  },
+  "settings": {
+    "seed": 42,
+    "epochs": 3,
+    "batch_size": 2,
+    "gradient_accumulation": 8,
+    "effective_batch_size": 16,
+    "max_length": 128,
+    "learning_rate": 2e-05,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "fp16": true,
+    "gradient_checkpointing": true
+  },
+  "selection": "Best epoch by validation macro-F1; test is excluded",
+  "provenance": "HKUST financial language-model pretraining plus our supervised training partition; distinct from ProsusAI/finbert, which already received Financial PhraseBank sentiment fine-tuning. No assertion that unpublished pretraining corpora have zero sentence overlap.",
+  "versions": {
+    "torch": "2.11.0+cu130",
+    "transformers": "4.57.6",
+    "accelerate": "1.10.1",
+    "numpy": "2.1.3",
+    "pandas": "2.2.3",
+    "scikit-learn": "1.6.1"
+  },
+  "parameter_counts": {
+    "total": 109754115,
+    "trainable": 109754115
+  },
+  "tokenization": {
+    "train": {
+      "rows": 3385,
+      "max_original_tokens": 124,
+      "rows_truncated": 0,
+      "max_length": 128,
+      "policy": "Right truncation including special tokens; dynamic padding per batch"
+    },
+    "validation": {
+      "rows": 725,
+      "max_original_tokens": 134,
+      "rows_truncated": 1,
+      "max_length": 128,
+      "policy": "Right truncation including special tokens; dynamic padding per batch"
+    }
+  },
+  "actual_rows": {
+    "train": 3385,
+    "validation": 725
+  },
+  "encoder_update_evidence": {
+    "parameter": "bert.encoder.layer.0.attention.self.query.weight",
+    "changed": true,
+    "before_sha256": "2e894f326398ba4b5ec37c437ffce87920f001a861857100002bb7a13d655a0e",
+    "after_sha256": "0a6fb0f7d23654f596ec7641bf6d9a1b32bfb972b278aaf50e19a25e45500b62",
+    "l2_change": 0.28370386362075806
+  },
+  "finished_at_utc": "2026-10-29T08:43:24.304177+00:00",
+  "elapsed_seconds": 470.172,
+  "global_optimizer_steps": 636,
+  "selected_checkpoint": "models/finbert_finetuned/checkpoints/checkpoint-424",
+  "best_validation_macro_f1": 0.819245847586901,
+  "validation_metrics": {
+    "eval_loss": 0.39464494585990906,
+    "eval_accuracy": 0.8427586206896551,
+    "eval_macro_f1": 0.819245847586901,
+    "eval_runtime": 4.9477,
+    "eval_samples_per_second": 146.534,
+    "eval_steps_per_second": 73.368,
+    "epoch": 3.0
+  },
+  "training_metrics": {
+    "train_runtime": 462.3813,
+    "train_samples_per_second": 21.962,
+    "train_steps_per_second": 1.375,
+    "total_flos": 215703668771136.0,
+    "train_loss": 0.33430124716188925,
+    "epoch": 3.0
+  },
+  "peak_gpu_allocated_bytes": 2213990912,
+  "checkpoint_directory": "models/finbert_finetuned/checkpoints",
+  "inference_file_sha256": {
+    "config.json": "1378309c875927253adffcbabbd791bba78eb098548770aabab3987bcdf330fd",
+    "model.safetensors": "39eb5674d0adaf82a9a69dcfdec6736a2698bd2a9c0c7e3e90cd41c2afbe68f3",
+    "special_tokens_map.json": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3",
+    "tokenizer.json": "ff9c125095ce0d30524ee1b8cc34397c89321199184b6d8f196170c39208eee5",
+    "tokenizer_config.json": "728f339446eb36034b456e80933b31713923bd4885a0d79893b699bd3ef48467",
+    "vocab.txt": "85f2481b4e3c25a7ece5e0e4930631a75c1a5fe2d31b0ecd9b5d51136ab98de8"
+  }
+}

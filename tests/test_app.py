@@ -14,7 +14,7 @@ APP_PATH = Path(__file__).resolve().parents[1] / "app.py"
 
 
 class FakePredictor:
-    max_tokens = 512
+    max_tokens = 128
 
     def token_lengths(self, texts):
         return [len(text.split()) + 2 for text in texts]
@@ -30,7 +30,7 @@ class FakePredictor:
 def app(monkeypatch):
     calls = []
 
-    def fake_get_predictor(model_name="FinBERT", device="cpu"):
+    def fake_get_predictor(model_name="Fine-tuned FinBERT", device="cpu"):
         calls.append((model_name, device))
         return FakePredictor()
 
@@ -53,7 +53,7 @@ def test_analyze_and_clear_stale_result_when_text_changes(app):
     ui, calls = app
     ui.button(key="analyze_text").click().run()
     assert not ui.exception
-    assert calls == [("FinBERT", "cpu")]
+    assert calls == [("Fine-tuned FinBERT", "cpu")]
     assert "single_result" in ui.session_state
     ui.text_area(key="news_text").set_value("A revised statement about falling profit.").run()
     assert not ui.exception
@@ -71,11 +71,11 @@ def test_blank_input_does_not_load_a_model(app):
 
 def test_over_limit_statement_is_rejected(app):
     ui, _ = app
-    ui.text_area(key="news_text").set_value("profit " * 512).run()
+    ui.text_area(key="news_text").set_value("profit " * 128).run()
     ui.button(key="analyze_text").click().run()
     assert not ui.exception
     assert "single_result" not in ui.session_state
-    assert any("supports at most 512" in notice.value for notice in ui.warning)
+    assert any("supports at most 128" in notice.value for notice in ui.warning)
 
 
 def test_demo_batch_preserves_invalid_row_and_model_change_clears_results(app):

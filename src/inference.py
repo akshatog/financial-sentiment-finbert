@@ -5,7 +5,8 @@ import os
 from pathlib import Path
 from typing import Any
 
-from src.config import BASELINE_PATH, LABELS, MODEL_ID, MODEL_REVISION, ROOT, setup_cache
+from src.config import (BASELINE_PATH, FINETUNED_MODEL_NAME, LABELS, MODEL_ID,
+                        MODEL_REVISION, PROSUS_MODEL_NAME, ROOT, setup_cache)
 
 
 class ModelInputError(ValueError):
@@ -17,7 +18,7 @@ class ModelLoadError(RuntimeError):
 
 
 class FinBERTPredictor:
-    """Sentence-level English financial sentiment with pretrained FinBERT."""
+    """Sentence-level financial sentiment with an explicitly selected checkpoint."""
 
     def __init__(self, device: str = 'cpu', model_path: str | Path | None = None):
         setup_cache()
@@ -33,23 +34,27 @@ class FinBERTPredictor:
         self.device = torch.device(device)
         torch.set_num_threads(max(1, min(8, int(os.environ.get('FINBERT_CPU_THREADS', '4')))))
         local = Path(model_path) if model_path else ROOT / 'models' / 'finbert'
+        if model_path is not None and not (local / 'config.json').is_file():
+            raise ModelLoadError(f'The selected local checkpoint is missing config.json: {local}')
         source = str(local) if (local / 'config.json').exists() else MODEL_ID
-        kwargs: dict[str, Any] = {} if source != MODEL_ID else {'revision': MODEL_REVISION}
+        kwargs: dict[str, Any] = {'local_files_only': True} if source != MODEL_ID else {'revision': MODEL_REVISION}
+        kwargs['trust_remote_code'] = False
         try:
             self.tokenizer = AutoTokenizer.from_pretrained(source, **kwargs)
             self.model = AutoModelForSequenceClassification.from_pretrained(
                 source, use_safetensors=True, **kwargs
             ).to(self.device).eval()
         except (OSError, RuntimeError, ValueError) as exc:
-            raise ModelLoadError(
-                'FinBERT could not load. Run python -m scripts.download_model '
-                'with internet access, then try again.'
-            ) from exc
+            message = (f'The selected local checkpoint could not load: {local}. Preserve its files and check the saved model.'
+                       if model_path is not None else
+                       'Prosus FinBERT could not load. Run python -m scripts.download_model with internet access, then try again.')
+            raise ModelLoadError(message) from exc
         self.id2label = {int(i): label.lower() for i, label in self.model.config.id2label.items()}
         if set(self.id2label.values()) != set(LABELS):
             raise ModelLoadError(f'Unexpected checkpoint labels: {self.id2label}')
         self.max_tokens = min(int(self.tokenizer.model_max_length), int(self.model.config.max_position_embeddings))
-        self.name = 'FinBERT'
+        self.name = PROSUS_MODEL_NAME
+
 
     def token_lengths(self, texts: list[str]) -> list[int]:
         return [len(self.tokenizer.encode(text, add_special_tokens=True, truncation=False)) for text in texts]
@@ -80,6 +85,23 @@ class FinBERTPredictor:
         return outputs
 
 
+class FineTunedFinBERTPredictor(FinBERTPredictor):
+    """The verified student checkpoint, with its documented 128-token policy."""
+
+    def __init__(self, device: str = 'cpu'):
+        from src.model_artifacts import ensure_finetuned_model
+        try:
+            path = ensure_finetuned_model()
+        except (OSError, RuntimeError, ValueError, KeyError) as exc:
+            raise ModelLoadError(
+                'The fine-tuned checkpoint could not be verified or downloaded. '
+                'Check the internet connection and pinned project release; no other model was substituted.'
+            ) from exc
+        super().__init__(device=device, model_path=path)
+        self.max_tokens = min(self.max_tokens, 128)
+        self.name = FINETUNED_MODEL_NAME
+
+
 class BaselineAdapter:
     """Expose the same interface for the student-trained conventional model."""
 
@@ -103,8 +125,10 @@ class BaselineAdapter:
         return self.predictor.predict(texts) if texts else []
 
 
-def get_predictor(model_name: str = 'FinBERT', device: str = 'cpu'):
-    if model_name == 'FinBERT':
+def get_predictor(model_name: str = FINETUNED_MODEL_NAME, device: str = 'cpu'):
+    if model_name == FINETUNED_MODEL_NAME:
+        return FineTunedFinBERTPredictor(device=device)
+    if model_name in {PROSUS_MODEL_NAME, 'FinBERT'}:
         return FinBERTPredictor(device=device)
     if model_name in {'TF-IDF baseline', 'Baseline'}:
         return BaselineAdapter()

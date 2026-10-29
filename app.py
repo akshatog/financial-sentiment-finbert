@@ -7,6 +7,7 @@ CSV validation, and safe export behavior lives in the reusable ``src`` modules.
 from __future__ import annotations
 
 import hashlib
+import gc
 import html
 import json
 from pathlib import Path
@@ -16,7 +17,9 @@ import pandas as pd
 import streamlit as st
 
 from src.batch import analyze_dataframe, export_csv, read_csv_file
-from src.config import LABELS, MODEL_ID, MODEL_REVISION, OUTPUT_DIR, ROOT, setup_cache
+from src.config import (FINETUNED_BASE_ID, FINETUNED_BASE_REVISION,
+                        FINETUNED_MODEL_NAME, LABELS, MODEL_ID, MODEL_REVISION,
+                        OUTPUT_DIR, PROSUS_MODEL_NAME, ROOT, setup_cache)
 from src.inference import ModelInputError, get_predictor
 
 
@@ -52,15 +55,21 @@ st.set_page_config(
 setup_cache()
 
 
-@st.cache_resource(show_spinner=False)
+@st.cache_resource(show_spinner=False, max_entries=1)
 def load_predictor(model_name: str, device: str):
-    """Cache a model per explicit selection; importing the app downloads nothing."""
+    """Keep one selected predictor; importing the app downloads nothing."""
     return get_predictor(model_name, device=device)
 
 
 def clear_results() -> None:
     for key in ("single_result", "batch_result", "batch_result_signature"):
         st.session_state.pop(key, None)
+
+
+def change_model() -> None:
+    clear_results()
+    load_predictor.clear()
+    gc.collect()
 
 
 def clear_single_result() -> None:
@@ -92,8 +101,8 @@ def section_label(number: str, label: str) -> None:
 def explain_model_error(error: Exception) -> None:
     st.error(f"Analysis could not run: {error}")
     st.caption(
-        "For FinBERT, the first run needs an internet connection to download the "
-        "pinned model. For the baseline, run `python scripts/train_baseline.py` "
+        "The first transformer analysis needs internet access to download its "
+        "verified checkpoint. For the baseline, run `python scripts/train_baseline.py` "
         "from the project folder. See the README for setup and recovery steps."
     )
 
@@ -159,12 +168,12 @@ def render_metrics(payload: dict[str, Any], label: str) -> None:
     if values:
         metric_columns = st.columns(len(values))
         for column, (name, value) in zip(metric_columns, values.items()):
-            column.metric(name, f"{value:.3f}")
+            column.metric(name, f"{value:.2%}")
     else:
         st.caption("No summary scores are available in this output yet.")
     candidate = payload.get("metrics", payload)
     if isinstance(candidate, dict) and isinstance(candidate.get("n_examples"), int):
-        st.caption(f"{candidate['n_examples']:,} evaluated statements · Scores range from 0 to 1.")
+        st.caption(f"{candidate['n_examples']:,} evaluated statements · Summary scores shown as percentages.")
     report = candidate.get("classification_report", candidate.get("report")) if isinstance(candidate, dict) else None
     if isinstance(report, dict):
         class_rows = {name: report[name] for name in LABELS if isinstance(report.get(name), dict)}
@@ -223,15 +232,18 @@ with st.sidebar:
     )
     st.markdown('<div class="eyebrow">Model workspace</div>', unsafe_allow_html=True)
     model_name = st.selectbox(
-        "Analysis model", ["FinBERT", "TF-IDF baseline"], key="model_name", on_change=clear_results
+        "Analysis model", [FINETUNED_MODEL_NAME, PROSUS_MODEL_NAME, "TF-IDF baseline"],
+        key="model_name", on_change=change_model
     )
-    if model_name == "FinBERT":
-        st.caption("A pretrained BERT transformer adapted to financial language by ProsusAI.")
+    if model_name == FINETUNED_MODEL_NAME:
+        st.caption("Our HKUST FinBERT model, fine-tuned on the saved training split. Maximum 128 tokens.")
+    elif model_name == PROSUS_MODEL_NAME:
+        st.caption("The pretrained ProsusAI reference, already sentiment-fine-tuned on Financial PhraseBank. Maximum 512 tokens.")
     else:
         st.caption("Our trained TF-IDF + logistic regression model, fitted on the saved training split.")
     with st.expander("Runtime settings"):
         runtime = st.selectbox(
-            "Inference device", ["CPU", "Auto"], key="runtime", on_change=clear_results,
+            "Inference device", ["CPU", "Auto"], key="runtime", on_change=change_model,
             help="CPU is the portable default. Auto uses an available accelerator when supported.",
         )
         st.caption("Models load on the first analysis request and are reused in this session.")
@@ -241,15 +253,15 @@ with st.sidebar:
     st.caption("Positive · Neutral · Negative")
     st.markdown(
         '<div class="side-footer quiet-note">A Unit 4 application of BERT, tokenization, '
-        'and transformer text classification.<br><br>Student baseline training is separate '
-        'from the pretrained FinBERT checkpoint.</div>', unsafe_allow_html=True,
+        'and transformer fine-tuning.<br><br>Our trained FinBERT, a conventional baseline, '
+        'and a pretrained reference.</div>', unsafe_allow_html=True,
     )
 
 st.markdown('<div class="eyebrow">Financial language · Natural language processing</div>', unsafe_allow_html=True)
 st.title("The sentiment behind the statement.")
 st.markdown(
-    '<div class="hero-deck">Explore the tone of financial news with FinBERT and a student-trained '
-    'baseline. Three labels, transparent scores, and room for context.</div>', unsafe_allow_html=True,
+    '<div class="hero-deck">Explore financial news with our fine-tuned FinBERT model. '
+    'Compare a trained baseline and pretrained reference, with three labels and transparent scores.</div>', unsafe_allow_html=True,
 )
 
 analyze_tab, batch_tab, results_tab, about_tab = st.tabs(
@@ -399,6 +411,8 @@ with results_tab:
     )
     audit = read_json(OUTPUT_DIR / "dataset_audit.json")
     evaluation = read_json(OUTPUT_DIR / "evaluation.json")
+    finetuned_evaluation = read_json(OUTPUT_DIR / "finetuning" / "evaluation.json")
+    training = read_json(OUTPUT_DIR / "finetuning" / "training_manifest.json")
     diagnostic = read_json(OUTPUT_DIR / "finbert_diagnostic.json")
     if not diagnostic and evaluation and isinstance(evaluation.get("finbert"), dict):
         if evaluation["finbert"].get("status") == "evaluated":
@@ -428,7 +442,7 @@ with results_tab:
             st.json(audit)
     else:
         st.info("Dataset audit is not available yet. Run the data preparation script listed in the README.")
-    section_label("02", "Two different kinds of evidence")
+    section_label("02", "Held-out model comparison")
     baseline_col, finbert_col = st.columns(2, gap="large")
     with baseline_col:
         st.markdown("#### Student-trained baseline")
@@ -444,11 +458,33 @@ with results_tab:
         else:
             st.info("Baseline evaluation has not been generated yet.")
     with finbert_col:
-        st.markdown("#### Pretrained FinBERT")
-        st.caption("TRAINING-OVERLAP DIAGNOSTIC")
-        st.warning("FinBERT was fine-tuned on Financial PhraseBank. Its scores on this dataset do not establish unseen-data performance.")
+        st.markdown("#### Student-fine-tuned FinBERT")
+        st.caption("SAME HELD-OUT PHRASEBANK TEST SPLIT")
+        st.write("HKUST's finance language model and a new sentiment head were fine-tuned on training data. Validation macro F1 selected the saved checkpoint before the test evaluation.")
+        if finetuned_evaluation:
+            render_metrics(finetuned_evaluation, "Fine-tuned FinBERT")
+            comparison = finetuned_evaluation.get("same_test_baseline_comparison", {})
+            if comparison:
+                st.caption(
+                    f"Compared with TF-IDF: {comparison['accuracy_change'] * 100:+.2f} percentage points accuracy; "
+                    f"{comparison['macro_f1_change'] * 100:+.2f} points macro F1 on this split."
+                )
+        else:
+            st.info("The fine-tuned evaluation is not available in this checkout.")
+    if training:
+        with st.expander("Fine-tuning record"):
+            st.write(
+                f"Full encoder and classifier fine-tuning · {training['settings']['epochs']} epochs · "
+                f"{training['global_optimizer_steps']} optimizer steps · "
+                f"{training['hardware']['gpu_name']} · seed {training['settings']['seed']}."
+            )
+            st.caption("Epoch 2 was selected by validation macro F1. The saved weights were reloaded for the final test evaluation.")
+            st.json(training)
+    st.caption("These results describe one saved PhraseBank split. They do not establish accuracy on future news or zero overlap with the language model's large pretraining corpus.")
+    with st.expander("Pretrained Prosus reference · prior training exposure"):
+        st.warning("The Prosus reference was already sentiment-fine-tuned on Financial PhraseBank. Its score here is a training-overlap diagnostic, so it is excluded from the held-out comparison above.")
         if diagnostic:
-            render_metrics(diagnostic, "FinBERT diagnostic")
+            render_metrics(diagnostic, "Prosus FinBERT diagnostic")
         else:
             st.info("No FinBERT PhraseBank diagnostic is available yet.")
     st.divider()
@@ -471,7 +507,8 @@ with about_tab:
         st.write("A classification head scores positive, neutral, and negative sentiment. The largest score determines the displayed label.")
     st.divider()
     st.markdown("#### What we trained")
-    st.write("The student-trained model is TF-IDF plus logistic regression. FinBERT is the downloaded ProsusAI checkpoint; this project does not claim to have trained or fine-tuned it.")
+    st.write("We fine-tuned the HKUST FinBERT language model and a new three-class sentiment head on 3,385 training sentences. All 109.75 million parameters were trainable. Validation selected the best checkpoint, and 726 held-out sentences were used for the final evaluation. We also trained the TF-IDF plus logistic regression baseline.")
+    st.caption("The separate Prosus reference uses downloaded weights with prior PhraseBank fine-tuning. It is not our student-trained checkpoint.")
     st.markdown("#### Read these labels carefully")
     st.markdown(
         "- **Positive:** the wording describes a favorable financial development.\n"
@@ -481,9 +518,10 @@ with about_tab:
     )
     st.caption("The app is designed for short English financial statements. Long inputs are flagged, and no sentence is silently truncated.")
     st.markdown("#### Reproducibility & sources")
-    st.code(f"Model: {MODEL_ID}\nRevision: {MODEL_REVISION}\nDefault device: cpu", language=None)
+    st.code(f"Fine-tuning base: {FINETUNED_BASE_ID}\nBase revision: {FINETUNED_BASE_REVISION}\nFine-tuned input limit: 128 tokens\nProsus reference: {MODEL_ID}\nProsus revision: {MODEL_REVISION}\nDefault device: cpu", language=None)
     st.markdown(
-        "[FinBERT model card](https://huggingface.co/ProsusAI/finbert) · "
+        "[HKUST FinBERT base](https://huggingface.co/yiyanghkust/finbert-pretrain) · "
+        "[Prosus model card](https://huggingface.co/ProsusAI/finbert) · "
         "[Financial PhraseBank](https://huggingface.co/datasets/takala/financial_phrasebank) · "
         "[BERT paper](https://arxiv.org/abs/1810.04805) · "
         "[Streamlit documentation](https://docs.streamlit.io/)"

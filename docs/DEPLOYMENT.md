@@ -1,21 +1,31 @@
 # Deployment to Streamlit Community Cloud
 
-The live app is deployed at **https://financial-sentiment-akshatog.streamlit.app/** from `akshatog/financial-sentiment-finbert`, branch `main`, entry point `app.py`, using Python 3.13. The account owner completed Streamlit and GitHub authentication.
+The project is hosted at **https://financial-sentiment-akshatog.streamlit.app/** from `akshatog/financial-sentiment-finbert`, branch `main`, entry point `app.py`, using the pinned CPU app dependencies. The account owner completed Streamlit and GitHub authentication.
 
-Browser verification succeeded for FinBERT and the trained baseline. The hosted demo CSV produced 7 valid predictions and retained its 1 blank row with an error status. The download control was available. The full uploaded-file/export workflow was also exercised locally, with the exported file saved as `data/examples/demo_predictions.csv`. GitHub Actions installed the pinned CPU dependencies and passed all tests on Linux.
+The original deployment was browser-verified for Prosus FinBERT, the trained conventional baseline and the bundled CSV workflow (7 valid rows plus 1 flagged blank). **The fine-tuned model update requires its own hosted verification.** Follow the current [delivery status](STATUS.md); the earlier check does not verify the new checkpoint.
 
-To reproduce or manage the deployment:
+## Fine-tuned model artifact
 
-1. Sign in at https://share.streamlit.io/ using the intended account.
-2. Choose Create app and select the existing GitHub repository: `akshatog/financial-sentiment-finbert`.
-3. Use branch `main`, main file `app.py`, and Python 3.13 in advanced settings when available.
-4. Deploy with the repository's pinned CPU dependencies in `requirements.txt`.
-5. The first FinBERT request downloads the pinned public checkpoint. No paid model API key is required. Allow time for its approximately 438 MB inference weights to load.
-6. Test a single sentence and the bundled demo CSV. Verify that the blank demo row remains flagged and the CSV export works.
-7. Test the live URL after any dependency or application change and keep README.md and docs/STATUS.md accurate.
+Large transformer weights are excluded from Git. When a local verified model is absent, the app uses the `finbert-finetuned-v1` project release. To avoid timeouts on large transfers, that release stores the original ZIP as twenty smaller parts and a pinned `finbert_finetuned_parts.json` manifest. The downloader checks every part, reconstructs the exact original ZIP, checks its checksum, and extracts only expected model files. The original exported archive SHA-256 is:
 
-The repository includes the small fitted conventional baseline, so that option can run without downloading transformer weights. Full PhraseBank records, the local Python environment, and downloaded FinBERT weights stay outside Git; the download/preparation scripts reproduce them. The current Linux deployment has been tested; cold-start latency and hosting resource availability can vary over time.
+```text
+155ca67e272fbaef5413b4cad7f44237a52a006b9ffee623ddd5013e5a862592
+```
 
-If the host cannot fit FinBERT within its resources, retain the verified local FinBERT demo and document any baseline-only deployment accurately. A live app must not silently replace FinBERT with another model.
+Release publication and hosted download/inference must be checked before calling the new live deployment complete. The tokenizer, label mapping and selected checkpoint must remain with the matching weights. A failed download must show a model-load error rather than silently using Prosus or the baseline.
 
-Official instructions: https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app
+The optional **Prosus FinBERT reference** uses its pinned Hugging Face snapshot. **TF-IDF baseline** uses the small included fitted artifact. No paid model API key is required. Cold starts and resource limits can affect download/load time.
+
+## Deploy and verify
+
+1. Sign in at https://share.streamlit.io/ and select the existing app/repository.
+2. Use branch `main`, entry point `app.py`, and the repository's supported Python environment and CPU `requirements.txt`.
+3. Confirm the trained artifact is available and its pinned checksum matches the returned model evidence.
+4. Launch **Fine-tuned FinBERT** and test a self-authored sentence. Confirm the selected model label, three named scores and 128-token policy.
+5. Test the bundled demo CSV, its blank-row validation, and CSV export.
+6. Check the baseline and optional Prosus reference without labelling one model's output as another's.
+7. Check the public URL and update README/status only with observed behavior. Model weights and dataset records stay out of Git.
+
+If the host cannot fit a transformer, keep the verified local demo and accurately describe the hosted limitation. Do not silently substitute another model.
+
+Official deployment instructions: https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app

@@ -1,10 +1,12 @@
-# Fine-tuning handoff
+# Completed FinBERT fine-tuning
 
-The training workflow is prepared. The actual HKUST FinBERT training and final
-evaluation remain pending until the GPU notebook finishes. The deployed app
-continues to use the existing Prosus reference and trained TF-IDF baseline.
+Full fine-tuning completed on 29 October 2026 and the returned model was verified locally. The selected HKUST checkpoint achieves **85.12% test accuracy and 84.46% macro-F1**, or **618/726 correct**. Training ran on a Tesla T4 for three epochs and 636 updates, with all 109,754,115 parameters trainable. Total recorded elapsed time was 470.172 seconds.
 
-## Run in Colab
+Validation macro-F1 selected **epoch 2/checkpoint 424** at **81.92%**. The epoch 3 validation result was slightly weaker. Keep the selected checkpoint; a new training run is not needed to launch the app. The instructions below document a deliberate reproduction, not a required next step.
+
+Evidence: [manifest](../outputs/finetuning/training_manifest.json), [history](../outputs/finetuning/training_history.json), [test evaluation](../outputs/finetuning/evaluation.json), and [verified import](../outputs/finetuning/import_verification.json). Hosted model verification is tracked separately in [status](STATUS.md).
+
+## Reproduce in Colab (optional new run)
 
 1. Open https://colab.research.google.com/ and sign in to your Google account.
 2. Choose **File → Upload notebook** and select
@@ -66,8 +68,7 @@ final export ZIP.
 HKUST's finance language-model checkpoint is a different release from the
 existing `ProsusAI/finbert`, which was already sentiment-fine-tuned on Financial
 PhraseBank. The original Prosus score stays a diagnostic with known dataset
-exposure. The new classifier can be compared with our TF-IDF baseline on the
-same held-out partition. This does not establish zero overlap with HKUST's
+exposure. The new classifier scored 85.12% accuracy and 84.46% macro-F1 against the TF-IDF baseline's 75.76% and 71.94% on the same held-out partition: +9.37 and +12.52 percentage points. This does not establish zero overlap with HKUST's
 large pretraining corpus. Fine-tuning may improve results or overfit; report
 the measured results without guaranteeing an improvement.
 
@@ -88,8 +89,7 @@ provide additional evaluation evidence, but are separate from this training run.
 The first model load may report unused pretraining-head weights and newly
 initialized classifier/pooler weights. These warnings are expected when adding
 the sentiment classifier. A traceback or failed cell should be checked before
-continuing. Actual CUDA execution is verified by the notebook's smoke test;
-the local tiny CPU test verifies workflow code, not large-model GPU fit or speed.
+continuing. The completed CUDA training is recorded in the returned manifest. The local tiny CPU test verifies workflow code; the subsequent returned-model check also verifies actual fine-tuned weights and inference.
 
 The current notebook streams the child process's standard output and errors into
 each cell. Older saved copies used inherited subprocess output, which may appear
@@ -102,7 +102,7 @@ the final result or saved training manifest before deciding whether to retry.
 The current app environment has CPU-only PyTorch and must remain separate from
 any CUDA training environment. The local RTX 3050 Laptop GPU has 4 GB; full
 fine-tuning there requires a short feasibility test and smaller microbatches.
-Colab is the selected route because a GPU is available now.
+The completed training used Colab's Tesla T4; local CPU inference remains separate from GPU training.
 
 The trainer saves resumable epoch checkpoints under the model's `checkpoints/`
 directory. Colab files are ephemeral. For a longer run you may optionally mount

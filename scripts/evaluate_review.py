@@ -1,4 +1,4 @@
-"""Evaluate both models on a completed, frozen human review file."""
+"""Evaluate the student models on a completed, frozen human review file."""
 from __future__ import annotations
 
 import hashlib
@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from src.config import LABELS, OUTPUT_DIR, ROOT
+from src.config import FINETUNED_MODEL_NAME, LABELS, OUTPUT_DIR, ROOT
 from src.dataset import normalize_text
 from src.inference import get_predictor
 from src.metrics import classification_metrics
@@ -63,7 +63,7 @@ def main() -> None:
     }
     private = OUTPUT_DIR / 'predictions'
     private.mkdir(parents=True, exist_ok=True)
-    for name in ['FinBERT', 'TF-IDF baseline']:
+    for name in [FINETUNED_MODEL_NAME, 'TF-IDF baseline']:
         rows = get_predictor(name).predict(reviewed['text'].tolist())
         report['models'][name] = classification_metrics(reviewed['human_label'].tolist(), [row['label'] for row in rows])
         output = reviewed.reset_index(drop=True).join(pd.DataFrame(rows).add_prefix('model_'))

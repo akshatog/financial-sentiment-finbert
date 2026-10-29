@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "evaluated_at_utc": "2026-10-29T08:49:18.134729+00:00",
+  "model": "Student-fine-tuned HKUST FinBERT",
+  "base_model": "yiyanghkust/finbert-pretrain",
+  "base_revision": "88ab954a39ea6d3ce2b62cff086dd5ad1172c664",
+  "training_run_id": "20261029T083534Z-3ea89e75",
+  "test_fingerprint": "ac70fa2c2fe8c1ac658b4b34daae54e4fdd3d2472e173af645033ebca9b3025d",
+  "test_rows": 726,
+  "inference_file_sha256": {
+    "config.json": "1378309c875927253adffcbabbd791bba78eb098548770aabab3987bcdf330fd",
+    "model.safetensors": "39eb5674d0adaf82a9a69dcfdec6736a2698bd2a9c0c7e3e90cd41c2afbe68f3",
+    "special_tokens_map.json": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3",
+    "tokenizer.json": "ff9c125095ce0d30524ee1b8cc34397c89321199184b6d8f196170c39208eee5",
+    "tokenizer_config.json": "728f339446eb36034b456e80933b31713923bd4885a0d79893b699bd3ef48467",
+    "vocab.txt": "85f2481b4e3c25a7ece5e0e4930631a75c1a5fe2d31b0ecd9b5d51136ab98de8"
+  },
+  "training_manifest_sha256": "1ea309e26939975f5e220be8115e299cc9fca9f52695500f3cb0bb07bb8b4710",
+  "max_length": 128,
+  "test_tokenization": {
+    "rows": 726,
+    "max_original_tokens": 97,
+    "rows_truncated": 0,
+    "max_length": 128,
+    "policy": "Right truncation including special tokens; dynamic padding per batch"
+  },
+  "metrics": {
+    "n_examples": 726,
+    "accuracy": 0.8512396694214877,
+    "macro_f1": 0.8446063720591761,
+    "weighted_f1": 0.8513987971640972,
+    "classification_report": {
+      "negative": {
+        "precision": 0.8977272727272727,
+        "recall": 0.8681318681318682,
+        "f1-score": 0.88268156424581,
+        "support": 91
+      },
+      "neutral": {
+        "precision": 0.8842592592592593,
+        "recall": 0.8863109048723898,
+        "f1-score": 0.8852838933951332,
+        "support": 431
+      },
+      "positive": {
+        "precision": 0.7621359223300971,
+        "recall": 0.7696078431372549,
+        "f1-score": 0.7658536585365854,
+        "support": 204
+      },
+      "accuracy": 0.8512396694214877,
+      "macro avg": {
+        "precision": 0.848040818105543,
+        "recall": 0.8413502053805043,
+        "f1-score": 0.8446063720591761,
+        "support": 726
+      },
+      "weighted avg": {
+        "precision": 0.8516317502951273,
+        "recall": 0.8512396694214877,
+        "f1-score": 0.8513987971640972,
+        "support": 726
+      }
+    },
+    "per_class": {
+      "negative": {
+        "precision": 0.8977272727272727,
+        "recall": 0.8681318681318682,
+        "f1-score": 0.88268156424581,
+        "support": 91
+      },
+      "neutral": {
+        "precision": 0.8842592592592593,
+        "recall": 0.8863109048723898,
+        "f1-score": 0.8852838933951332,
+        "support": 431
+      },
+      "positive": {
+        "precision": 0.7621359223300971,
+        "recall": 0.7696078431372549,
+        "f1-score": 0.7658536585365854,
+        "support": 204
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "negative",
+        "neutral",
+        "positive"
+      ],
+      "rows": "true",
+      "columns": "predicted",
+      "counts": [
+        [
+          79,
+          5,
+          7
+        ],
+        [
+          7,
+          382,
+          42
+        ],
+        [
+          2,
+          45,
+          157
+        ]
+      ]
+    }
+  },
+  "test_evaluation_runs": 1,
+  "explicit_repeat_requested": false,
+  "provenance": {
+    "test_used_for_training_or_selection": false,
+    "normalized_sentence_overlap_with_train_or_validation": 0,
+    "selection": "Best epoch by validation macro-F1; test is excluded",
+    "limitation": "One seeded PhraseBank split. Original Prosus checkpoint's PhraseBank diagnostic is not a fair unseen-data benchmark. Unpublished language-model pretraining overlap is not established."
+  },
+  "same_test_baseline_comparison": {
+    "baseline": "TF-IDF + logistic regression",
+    "baseline_accuracy": 0.7575757575757576,
+    "baseline_macro_f1": 0.7194077658852299,
+    "finetuned_accuracy": 0.8512396694214877,
+    "finetuned_macro_f1": 0.8446063720591761,
+    "accuracy_change": 0.09366391184573009,
+    "macro_f1_change": 0.12519860617394618,
+    "interpretation": "Descriptive comparison on the same seeded test split; no statistical significance or improvement is assumed."
+  }
+}
