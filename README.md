@@ -1,5 +1,10 @@
 # Financial News Sentiment Analysis with FinBERT
 
+**[Launch the live app](https://financial-sentiment-akshatog.streamlit.app/)**
+
+[![GitHub repository](https://img.shields.io/badge/GitHub-Repository-181717?logo=github)](https://github.com/akshatog/financial-sentiment-finbert)
+[![Tests](https://github.com/akshatog/financial-sentiment-finbert/actions/workflows/tests.yml/badge.svg)](https://github.com/akshatog/financial-sentiment-finbert/actions/workflows/tests.yml)
+
 A Streamlit application that classifies short English financial statements as **positive**, **negative**, or **neutral**. It uses the pretrained [`ProsusAI/finbert`](https://huggingface.co/ProsusAI/finbert) transformer and a separately trained TF-IDF + logistic regression baseline.
 
 **Unit 4 · Deep Learning Project**

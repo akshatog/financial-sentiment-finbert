@@ -1,0 +1,15 @@
+{
+  "local_test_count": 25,
+  "local_test_result": "passed",
+  "dependency_check": "passed",
+  "github_actions_run": "https://github.com/akshatog/financial-sentiment-finbert/actions/runs/40775828023",
+  "github_linux_job_result": "success",
+  "live_url": "https://financial-sentiment-akshatog.streamlit.app/",
+  "live_browser_checks": {
+    "finbert_single_text": "passed; demo statement classified positive",
+    "baseline_single_text": "passed; demo statement classified positive",
+    "baseline_bundled_csv": {"source_rows": 8, "analyzed": 7, "invalid": 1, "download_control": "visible"},
+    "local_uploaded_csv_export": "passed; 8 rows preserved, including 1 invalid row"
+  },
+  "independent_human_review": "pending; no independent score reported"
+}

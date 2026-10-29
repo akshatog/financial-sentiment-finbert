@@ -133,11 +133,16 @@ if(imagePath){
   const bytes=await fs.readFile(imagePath);s.images.add({blob:bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength),contentType:imagePath.endsWith('.jpg')?'image/jpeg':'image/png',alt:'Financial sentiment application running locally',fit:'contain',position:{left:72,top:154,width:430,height:464}});
   text(s,'Single text',570,180,638,45,29,theme.teal,true);text(s,'Inspect the label and all three model scores.',570,230,638,116,28);
   text(s,'Batch CSV',570,369,638,45,29,theme.teal,true);text(s,'Choose the text column and export each result with its row status.',570,419,638,150,28);
+  text(s,'Live app',570,528,638,38,26,theme.teal,true);
+  const liveLabel='financial-sentiment-akshatog.streamlit.app';
+  const liveText=text(s,liveLabel,570,568,638,44,24,theme.ink);
+  liveText.text.get(liveLabel).link={uri:'https://financial-sentiment-akshatog.streamlit.app/',isExternal:true};
 }else{
   para(s,'Single text','Analyse a financial sentence. Inspect the predicted label and all three model scores.',178);
   para(s,'Batch CSV','Choose a text column. Inspect row status and download predictions with the original columns.',365);
 }
 text(s,'CSV limits: 2 MB and 500 rows. Blank or invalid rows keep a visible status.',72,629,1136,40,24,theme.muted);
+s.speakerNotes.text+=' Live hosted application: https://financial-sentiment-akshatog.streamlit.app/ . Source repository: https://github.com/akshatog/financial-sentiment-finbert .';
 }
 {
 const s=slide('Held-out baseline results',`Test partition: ${B.n_examples} examples. Both displayed models use exactly the same held-out partition. The majority predictor always returns the most common training label. Raw metrics: ${JSON.stringify({baseline:{accuracy:B.accuracy,macro_f1:B.macro_f1},majority:{accuracy:M.accuracy,macro_f1:M.macro_f1}})}. `+sourceNotes);
