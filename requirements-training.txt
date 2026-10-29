@@ -1,0 +1,10 @@
+# Separate from the deployed app's CPU requirements.
+# Colab supplies its own CUDA-enabled torch. Do not install requirements.txt here.
+torch>=2.6,<3
+transformers==4.57.6
+accelerate==1.10.1
+pandas>=2.2,<3
+numpy>=1.26,<3
+scikit-learn>=1.5,<2
+matplotlib>=3.8,<4
+safetensors>=0.4.3,<1

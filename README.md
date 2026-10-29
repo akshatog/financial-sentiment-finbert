@@ -14,6 +14,8 @@ A Streamlit application that classifies short English financial statements as **
 
 > **What we trained:** the TF-IDF + logistic regression baseline. FinBERT uses downloaded pretrained weights without further training in this project. FinBERT was already fine-tuned on Financial PhraseBank, so its PhraseBank scores are an overlapping-data diagnostic, not an independent test or a fair comparison with the baseline's held-out result.
 
+**Fine-tuning next:** a separate [Colab training workflow](docs/FINETUNING.md) is prepared for `yiyanghkust/finbert-pretrain` with a new sentiment head and full encoder fine-tuning. GPU execution and final metrics are pending. The deployed app and reported results above still describe the completed original models.
+
 ## Features
 
 - Analyse a financial sentence and inspect all three model scores.

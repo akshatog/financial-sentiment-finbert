@@ -1,4 +1,5 @@
 .venv/
+.venv-train/
 .cache/
 __pycache__/
 *.py[cod]
@@ -12,9 +13,13 @@ data/raw/
 data/processed/
 data/splits/
 models/finbert/
+models/finbert_finetuned/
+models/finbert_finetuned-*/
 outputs/predictions/
 outputs/errors/
 outputs/private/
+outputs/finetuning/private/
+finbert_finetuned_results*.zip
 presentation/.build/
 presentation/node_modules/
 node_modules/
