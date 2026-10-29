@@ -9,6 +9,18 @@ We fine-tuned all 109,754,115 parameters of `yiyanghkust/finbert-pretrain` with 
 **How was FinBERT trained?**
 The fixed training split has 3,385 sentences, validation 725, and test 726. On a Tesla T4, training used 3 epochs, learning rate 2e-5, maximum length 128, microbatch 2, accumulation 8, FP16 and gradient checkpointing. The run completed 636 optimizer updates in about 7 minutes 50 seconds.
 
+**Which optimizer and loss did you use?**
+PyTorch AdamW, selected by Hugging Face Trainer with `optim="adamw_torch"`, with learning rate 0.00002 and weight decay 0.01. AdamW uses moving averages of gradients and squared gradients to adapt updates, with weight decay applied separately. Multi-class cross-entropy compares the three raw logits with the correct class ID. Backpropagation computes gradients; AdamW updates parameters. Softmax turns logits into displayed class scores during inference. See the [AdamW documentation](https://docs.pytorch.org/docs/2.15/generated/torch.optim.AdamW.html).
+
+**What scheduler did you use?**
+The installed Trainer's default linear schedule, with `warmup_ratio=0.1`: the learning rate rises during the first 10% of scheduled updates, then decreases linearly. The verified inherited defaults are beta1=0.9, beta2=0.999, epsilon=1e-8 and gradient clipping at norm 1.0. These settings are defaults, not separately tuned choices.
+
+**What does gradient accumulation mean here?**
+Each microbatch contains two sentences. Gradients accumulate across eight microbatches before an optimizer update, giving an effective batch of 16 on one GPU for full batches. It reduces the memory needed compared with processing all 16 simultaneously. The last accumulation group in an epoch can be smaller.
+
+**Why FP16, dynamic padding, and gradient checkpointing?**
+Mixed precision uses lower precision for suitable operations while retaining training safeguards. Dynamic padding pads only to each batch's required length. Gradient checkpointing recomputes some intermediate activations during backpropagation instead of retaining all of them, trading computation for lower memory use. These controls support the training run; they do not establish greater accuracy.
+
 **Why is the chosen model from epoch 2 if you trained 3 epochs?**
 Validation macro-F1 selected checkpoint 424 from epoch 2 at 81.92%. Epoch 3 was slightly weaker and its validation loss increased. The training code reloaded the best validation checkpoint before export; the test did not choose the epoch.
 

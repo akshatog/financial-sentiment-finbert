@@ -140,6 +140,7 @@ tests/          Focused checks
 
 - [Editable presentation](presentation/financial_sentiment_finetuned.pptx)
 - [Methodology](docs/METHODOLOGY.md), [results](docs/RESULTS.md), [demo guide](docs/DEMO_GUIDE.md), and [viva guide](docs/VIVA_GUIDE.md)
+- [Slide-by-slide presentation and rehearsal guide](docs/PRESENTATION_GUIDE.md)
 - [Deployment](docs/DEPLOYMENT.md), [delivery status](docs/STATUS.md), and [attribution](docs/ATTRIBUTION.md)
 - [HKUST checkpoint](https://huggingface.co/yiyanghkust/finbert-pretrain) and [authors' fine-tuning example](https://github.com/yya518/FinBERT/blob/master/finetune.ipynb)
 - [Prosus checkpoint](https://huggingface.co/ProsusAI/finbert) and [Araci (2019)](https://arxiv.org/abs/1908.10063)
