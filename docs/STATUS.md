@@ -10,7 +10,7 @@
 | Tests | Complete | 25 passed locally; GitHub Actions Linux job passed. Windows Streamlit tests require loopback access. |
 | Held-out baseline evaluation | Complete | 726 test examples; accuracy 75.76%, macro F1 71.94%. |
 | FinBERT PhraseBank diagnostic | Complete | Accuracy 88.15%, macro F1 87.51%; existing dataset training exposure disclosed. |
-| README and presentation | Complete | 12-slide editable PPTX with Akshat Agarwal's supplied details and actual results. |
+| README and presentation | Complete | Six-slide editable PPTX matching the supplied reference format, with Akshat Agarwal's details and actual results. |
 | Public GitHub repository | Published | https://github.com/akshatog/financial-sentiment-finbert |
 | Independent human-reviewed check | Pending reviewer | Fill human_label in data/review/candidates.csv before predictions. |
 | Live deployment | Complete and browser verified | https://financial-sentiment-akshatog.streamlit.app/ — FinBERT and baseline predictions work; hosted demo CSV retains 8 rows, with 7 analyzed and 1 flagged. |

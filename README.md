@@ -158,7 +158,7 @@ Thirty source-linked paraphrased candidate sentences are prepared in [the review
 
 ## Submission materials
 
-- [Editable presentation](presentation/financial_sentiment.pptx)
+- [Editable presentation](presentation/financial_sentiment_revised.pptx)
 - [Methodology and evaluation policy](docs/METHODOLOGY.md)
 - [Live demo guide](docs/DEMO_GUIDE.md)
 - [Viva questions and answers](docs/VIVA_GUIDE.md)

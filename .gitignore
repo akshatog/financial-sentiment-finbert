@@ -22,3 +22,4 @@ node_modules/
 *.tmp
 .DS_Store
 .chart-data-*/
+~$*
