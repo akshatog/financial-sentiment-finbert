@@ -1,5 +1,5 @@
 {
-  "verified_at_utc": "2026-10-29T09:37:00+00:00",
+  "verified_at_utc": "2026-10-29T09:41:40.270210+00:00",
   "code_commit": "8e5c437a8742f530fe70cedffa19105dd05bbd59",
   "app_url": "https://financial-sentiment-akshatog.streamlit.app/",
   "release_url": "https://github.com/akshatog/financial-sentiment-finbert/releases/tag/finbert-finetuned-v1",
