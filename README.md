@@ -87,6 +87,8 @@ FinBERT trained for **3 epochs and 636 optimizer steps** on a Tesla T4 in **470.
 
 Evidence: [dataset audit](outputs/dataset_audit.json), [baseline metadata](models/baseline_metadata.json), [fine-tuning manifest](outputs/finetuning/training_manifest.json), [training history](outputs/finetuning/training_history.json), [fine-tuned test metrics](outputs/finetuning/evaluation.json), [verified import](outputs/finetuning/import_verification.json), and [detailed results](docs/RESULTS.md).
 
+![Recorded training loss and validation checkpoint selection](outputs/finetuning/training_curves.png)
+
 ## Reproduce the experiment
 
 To reproduce preparation and the conventional baseline:

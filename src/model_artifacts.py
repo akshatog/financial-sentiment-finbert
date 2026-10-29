@@ -9,7 +9,7 @@ import threading
 from urllib.request import Request, urlopen
 from zipfile import ZipFile
 
-from src.config import (FINETUNED_ARCHIVE_SHA256, FINETUNED_ARCHIVE_URL,
+from src.config import (FINETUNED_ARCHIVE_SHA256,
                         FINETUNED_BASE_ID, FINETUNED_BASE_REVISION,
                         FINETUNED_MANIFEST_SHA256, FINETUNED_MODEL_PATH,
                         FINETUNED_PARTS_SHA256, FINETUNED_PARTS_URL,

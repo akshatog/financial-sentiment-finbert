@@ -12,13 +12,13 @@
 | Original Prosus diagnostic | Complete | Accuracy 88.15%, macro-F1 87.51%; known prior PhraseBank training exposure disclosed. |
 | Fine-tuned app integration | Complete locally | Student checkpoint is the default; 128-token limit; verified download and fail-closed model selection. |
 | Submission presentation | Complete | Six editable slides in presentation/financial_sentiment_finetuned.pptx with actual fine-tuning and test results. |
-| Current local checks | Passed | 37 passed, 1 optional training-dependency test skipped; the tiny Trainer integration was verified separately during workflow preparation. |
+| Current local checks | Passed | Full app/data suite: 37 passed, 1 optional training-dependency test skipped. Two additional multipart-transfer checks passed; the tiny Trainer integration was verified separately during workflow preparation. |
 | Public GitHub repository | Published | https://github.com/akshatog/financial-sentiment-finbert |
 | Independent human-reviewed check | Pending reviewer | Label data/review/candidates.csv before predictions. |
 | Existing live deployment | Original models verified | https://financial-sentiment-akshatog.streamlit.app/; fine-tuned release verification pending. |
 
 The transformer training is complete. A new Colab run is not needed. The selected model improves over the baseline by 9.37 percentage points accuracy and 12.52 points macro-F1 on the saved test split. These corpus results do not establish performance on future financial news.
 
-The original live app was browser-verified for Prosus FinBERT, the conventional baseline, and its CSV workflow. That earlier check does not verify the new fine-tuned deployment. Update the app/presentation and hosted verification rows only after those checks finish.
+The fine-tuned local app was browser-verified for prediction and measured results. The original live app was browser-verified for Prosus FinBERT, the conventional baseline, and its CSV workflow. Those earlier hosted checks do not verify the new fine-tuned deployment; its model-release transfer and hosted verification remain pending.
 
 Evidence: [training manifest](../outputs/finetuning/training_manifest.json), [history](../outputs/finetuning/training_history.json), [evaluation](../outputs/finetuning/evaluation.json), and [import verification](../outputs/finetuning/import_verification.json).
