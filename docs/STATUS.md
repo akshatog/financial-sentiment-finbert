@@ -13,12 +13,14 @@
 | Fine-tuned app integration | Complete locally | Student checkpoint is the default; 128-token limit; verified download and fail-closed model selection. |
 | Submission presentation | Complete | Six editable slides in presentation/financial_sentiment_finetuned.pptx with actual fine-tuning and test results. |
 | Current local checks | Passed | Full app/data suite: 37 passed, 1 optional training-dependency test skipped. Two additional multipart-transfer checks passed; the tiny Trainer integration was verified separately during workflow preparation. |
+| GitHub Actions | Passed | Published fine-tuned app commit: 39 passed, 1 optional training-dependency test skipped; run 40850227219. |
+| Trained model release | Published and verified | finbert-finetuned-v1; twenty verified transfer parts reconstruct the original checksum-pinned model bundle. |
 | Public GitHub repository | Published | https://github.com/akshatog/financial-sentiment-finbert |
 | Independent human-reviewed check | Pending reviewer | Label data/review/candidates.csv before predictions. |
-| Existing live deployment | Original models verified | https://financial-sentiment-akshatog.streamlit.app/; fine-tuned release verification pending. |
+| Live fine-tuned deployment | Prediction and CSV browser-verified | https://financial-sentiment-akshatog.streamlit.app/; verified student-model download, labelled prediction, and demo CSV with 7 analyzed rows plus 1 flagged blank. |
 
 The transformer training is complete. A new Colab run is not needed. The selected model improves over the baseline by 9.37 percentage points accuracy and 12.52 points macro-F1 on the saved test split. These corpus results do not establish performance on future financial news.
 
-The fine-tuned local app was browser-verified for prediction and measured results. The original live app was browser-verified for Prosus FinBERT, the conventional baseline, and its CSV workflow. Those earlier hosted checks do not verify the new fine-tuned deployment; its model-release transfer and hosted verification remain pending.
+The fine-tuned local app was browser-verified for prediction, measured results, and batch analysis (7 valid rows plus 1 flagged blank). The hosted app was rebooted after code deployment to clear an old imported configuration, then successfully downloaded and verified the published student model, produced a Fine-tuned FinBERT prediction, and analyzed the same demo CSV while retaining its blank-row error. The model is the default on both local and hosted apps. These interface checks are not additional accuracy benchmarks.
 
 Evidence: [training manifest](../outputs/finetuning/training_manifest.json), [history](../outputs/finetuning/training_history.json), [evaluation](../outputs/finetuning/evaluation.json), and [import verification](../outputs/finetuning/import_verification.json).

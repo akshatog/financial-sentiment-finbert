@@ -2,7 +2,7 @@
 
 The project is hosted at **https://financial-sentiment-akshatog.streamlit.app/** from `akshatog/financial-sentiment-finbert`, branch `main`, entry point `app.py`, using the pinned CPU app dependencies. The account owner completed Streamlit and GitHub authentication.
 
-The original deployment was browser-verified for Prosus FinBERT, the trained conventional baseline and the bundled CSV workflow (7 valid rows plus 1 flagged blank). **The fine-tuned model update requires its own hosted verification.** Follow the current [delivery status](STATUS.md); the earlier check does not verify the new checkpoint.
+The fine-tuned deployment is browser-verified: its default model downloaded and passed the pinned artifact checks, returned a labelled Fine-tuned FinBERT prediction, and analyzed the demo CSV with 7 valid rows plus 1 flagged blank. A reboot after the code update cleared the process's old imported configuration. See the current [delivery status](STATUS.md) and [live screenshot](screenshots/live_finetuned.jpg). The earlier Prosus/baseline deployment checks remain separate.
 
 ## Fine-tuned model artifact
 
@@ -12,7 +12,7 @@ Large transformer weights are excluded from Git. When a local verified model is 
 155ca67e272fbaef5413b4cad7f44237a52a006b9ffee623ddd5013e5a862592
 ```
 
-Release publication and hosted download/inference must be checked before calling the new live deployment complete. The tokenizer, label mapping and selected checkpoint must remain with the matching weights. A failed download must show a model-load error rather than silently using Prosus or the baseline.
+The [model release](https://github.com/akshatog/financial-sentiment-finbert/releases/tag/finbert-finetuned-v1) is published. Its public transfer manifest checksum and the hosted model download/inference were verified. The tokenizer, label mapping and selected checkpoint must remain with the matching weights. A failed download shows a model-load error rather than silently using Prosus or the baseline.
 
 The optional **Prosus FinBERT reference** uses its pinned Hugging Face snapshot. **TF-IDF baseline** uses the small included fitted artifact. No paid model API key is required. Cold starts and resource limits can affect download/load time.
 

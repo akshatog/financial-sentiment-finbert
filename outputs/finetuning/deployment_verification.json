@@ -1,0 +1,22 @@
+{
+  "verified_at_utc": "2026-10-29T09:37:00+00:00",
+  "code_commit": "8e5c437a8742f530fe70cedffa19105dd05bbd59",
+  "app_url": "https://financial-sentiment-akshatog.streamlit.app/",
+  "release_url": "https://github.com/akshatog/financial-sentiment-finbert/releases/tag/finbert-finetuned-v1",
+  "default_model": "Fine-tuned FinBERT",
+  "transfer_parts": 20,
+  "public_transfer_manifest_checksum_verified": true,
+  "archive_sha256": "155ca67e272fbaef5413b4cad7f44237a52a006b9ffee623ddd5013e5a862592",
+  "hosted_verified_model_download_and_prediction": true,
+  "hosted_positive_demo_score_display": "99.4%",
+  "hosted_csv_source_rows": 8,
+  "hosted_csv_analyzed_rows": 7,
+  "hosted_csv_flagged_blank_rows": 1,
+  "hosted_csv_export_control_available": true,
+  "demo_is_an_accuracy_benchmark": false,
+  "test_inference_repeated": false,
+  "github_actions_run": "https://github.com/akshatog/financial-sentiment-finbert/actions/runs/40850227219",
+  "github_actions_tests_passed": 39,
+  "github_actions_optional_tests_skipped": 1,
+  "screenshot": "docs/screenshots/live_finetuned.jpg"
+}
